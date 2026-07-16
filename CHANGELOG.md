@@ -1,3 +1,16 @@
+# warpd-rev
+
+Fork of warpd v1.3.5. All new features are opt-in via config (default = original behavior).
+
+- **Mini grid**: `grid_mode: mini` makes `g` enter a grid centered on cursor.
+  Configurable size via `grid_mini_denom` (default 4 = 1/4 screen).
+- **Snap movement**: `grid_snap: 1` makes wasd jump by full grid size.
+- **Grid reset**: `grid_reset: space` restores grid to initial mini size.
+- **Hint→grid**: `hint_post_mode: grid` enters grid directly after hint.
+- **Bugfix**: typo `input_evnet` → `input_event` (GCC 15 build failure).
+
+New config options: `grid_mode`, `grid_mini_denom`, `grid_snap`, `grid_reset`, `hint_post_mode`.
+
 # v1.3.5
 - macos: Various input bugfixes
 - macos: Introduce launchd service (the user should no longer run warpd explicitly)

@@ -162,6 +162,26 @@ draw operations to improve performance.
 
 # CONFIG OPTIONS
 
+## New in warpd-rev
+
+*grid_mode*: "full" or "mini" (default "full"). If "mini", the `g` key in
+normal mode enters a grid centered on cursor with initial size determined by
+*grid_mini_denom*.
+
+*grid_mini_denom*: integer, >= 2, default 4. The denominator used when
+calculating mini grid dimensions (screen / N).
+
+*grid_snap*: 0 or 1, default 0. If 1, direction keys (wasd) in grid mode jump
+by the full grid size, producing a snap-to-cell effect without overlap.
+
+*grid_reset*: key, default unbound. When pressed in grid mode, restores the
+grid to its initial mini size.
+
+*hint_post_mode*: "normal" or "grid", default "normal". If "grid", hint
+selection transitions directly into grid mode instead of normal mode.
+
+## Original options
+
 The program can be modified by placing configuration options in 
 *~/.config/warpd/config*, a complete list of which can be obtained
 with _--list-options_.

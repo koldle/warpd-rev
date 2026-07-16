@@ -82,6 +82,11 @@ static struct {
 	{ "grid_cut_right", "D", "Cut the grid right.", OPT_KEY },
 	{ "grid_keys", "u i j k", "A sequence of comma delimited keybindings which are ordered bookwise with respect to grid position.", OPT_KEY },
 	{ "grid_exit", "c", "Exit grid mode and return to normal mode.", OPT_KEY },
+	{ "grid_reset", "", "Reset grid to initial mini size (1/8 of screen). Requires an explicit key binding.", OPT_KEY },
+	{ "grid_snap", "0", "If 1, direction keys snap to grid cells instead of smooth movement.", OPT_INT },
+	{ "grid_mini_denom", "4", "Denominator for mini grid size (1/N of screen).", OPT_INT },
+	{ "grid_mode", "full", "Grid mode triggered by 'g' in normal mode: full (original) or mini.", OPT_STRING },
+	{ "hint_post_mode", "normal", "Mode to enter after hint: normal or grid.", OPT_STRING },
 
 	{ "grid_size", "4", "The thickness of grid lines in pixels.", OPT_INT },
 	{ "grid_border_size", "0", "The thickness of the grid border in pixels.", OPT_INT },

@@ -1,5 +1,7 @@
 # What
 
+*warpd-rev* — a revived fork of [warpd](https://github.com/rvaiya/warpd).
+
 A modal keyboard driven interface for mouse manipulation.
 
 # Demo
@@ -23,6 +25,21 @@ A modal keyboard driven interface for mouse manipulation.
 <img src="demo/discrete2.gif" height="400px" width="711px"/>
 </p>
 
+
+# New in warpd-rev
+
+warpd-rev adds the following features, all **opt-in** via config (default = original behavior):
+
+- **Mini grid** (`grid_mode: mini`): `g` from normal mode enters a grid centered
+  on cursor with configurable size (`grid_mini_denom`, default 4 = 1/4 screen).
+- **Snap movement** (`grid_snap: 1`): wasd jumps by full grid size with zero
+  overlap, instead of smooth scrolling.
+- **Grid reset** (`grid_reset: space`): restore grid to original mini size.
+- **Hint→grid** (`hint_post_mode: grid`): enter grid directly after hint
+  selection, skipping normal mode.
+- **GCC 15 build fix**: typo `input_evnet` → `input_event`.
+
+See `warpd --list-options` for all configurable settings.
 
 # Dependencies
 

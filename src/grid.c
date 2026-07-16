@@ -9,6 +9,12 @@
 static int grid_width;
 static int grid_height;
 static screen_t scr;
+static int grid_use_mini = 0;
+
+void grid_set_mini(int enable)
+{
+	grid_use_mini = enable;
+}
 
 static void draw_grid(screen_t scr,
 		      const char *color, int sz,
@@ -93,9 +99,18 @@ struct input_event *grid_mode()
 	platform->mouse_get_position(&scr, NULL, NULL);
 	platform->screen_get_dimensions(scr, &grid_width, &grid_height);
 
-	mx = grid_width / 2;
-	my = grid_height / 2;
-	platform->mouse_move(scr, mx, my);
+	if (grid_use_mini) {
+		int d = config_get_int("grid_mini_denom");
+		if (d < 2) d = 2;
+		grid_width /= d;
+		grid_height /= d;
+		grid_use_mini = 0;
+		platform->mouse_get_position(NULL, &mx, &my);
+	} else {
+		mx = grid_width / 2;
+		my = grid_height / 2;
+		platform->mouse_move(scr, mx, my);
+	}
 	redraw(mx, my, 1);
 
 	const char *keys[] = {
@@ -117,6 +132,7 @@ struct input_event *grid_mode()
 		"exit",
 		"drag",
 		"grid_exit",
+		"grid_reset",
 	};
 
 	config_input_whitelist(keys, sizeof keys / sizeof keys[0]);
@@ -126,6 +142,30 @@ struct input_event *grid_mode()
 
 		ev = platform->input_next_event(10);
 		platform->mouse_get_position(NULL, &mx, &my);
+
+		if (config_get_int("grid_snap") && ev && ev->pressed) {
+			int moved = 0;
+
+			if (config_input_match(ev, "grid_up")) {
+				my -= grid_height;
+				moved = 1;
+			} else if (config_input_match(ev, "grid_down")) {
+				my += grid_height;
+				moved = 1;
+			} else if (config_input_match(ev, "grid_left")) {
+				mx -= grid_width;
+				moved = 1;
+			} else if (config_input_match(ev, "grid_right")) {
+				mx += grid_width;
+				moved = 1;
+			}
+
+			if (moved) {
+				platform->mouse_move(scr, mx, my);
+				redraw(mx, my, 0);
+				continue;
+			}
+		}
 
 		if (mouse_process_key(ev, "grid_up", "grid_down", "grid_left", "grid_right")) {
 			redraw(mx, my, 0);
@@ -179,6 +219,17 @@ struct input_event *grid_mode()
 
 			platform->mouse_move(scr, mx, my);
 			redraw(mx, my, 0);
+		}
+
+		if (config_input_match(ev, "grid_reset")) {
+			int sw, sh, d;
+			d = config_get_int("grid_mini_denom");
+			if (d < 2) d = 2;
+			platform->screen_get_dimensions(scr, &sw, &sh);
+			grid_width = sw / d;
+			grid_height = sh / d;
+			platform->mouse_get_position(NULL, &mx, &my);
+			redraw(mx, my, 1);
 		}
 
 		if (config_input_match(ev, "buttons") ||

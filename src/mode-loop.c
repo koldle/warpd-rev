@@ -30,8 +30,11 @@ int mode_loop(int initial_mode, int oneshot, int record_history)
 				mode = MODE_HINT;
 			else if (config_input_match(ev, "hint2"))
 				mode = MODE_HINT2;
-			else if (config_input_match(ev, "grid"))
+			else if (config_input_match(ev, "grid")) {
+				if (!strcmp(config_get("grid_mode"), "mini"))
+					grid_set_mini(1);
 				mode = MODE_GRID;
+			}
 			else if (config_input_match(ev, "screen"))
 				mode = MODE_SCREEN_SELECTION;
 			else if ((rc = config_input_match(ev, "oneshot_buttons")) || !ev) {
@@ -49,7 +52,13 @@ int mode_loop(int initial_mode, int oneshot, int record_history)
 				goto exit;
 
 			ev = NULL;
-			mode = MODE_NORMAL;
+			if (!strcmp(config_get("hint_post_mode"), "grid")) {
+				if (!strcmp(config_get("grid_mode"), "mini"))
+					grid_set_mini(1);
+				mode = MODE_GRID;
+			} else {
+				mode = MODE_NORMAL;
+			}
 			break;
 		case MODE_GRID:
 			ev = grid_mode();
