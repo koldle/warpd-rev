@@ -58,6 +58,20 @@ void x_screen_list(struct screen *rscreens[MAX_SCREENS], size_t *n)
 
 void x_screen_get_dimensions(struct screen *scr, int *w, int *h)
 {
+	int n, i;
+	XineramaScreenInfo *screens = XineramaQueryScreens(dpy, &n);
+
+	if (screens) {
+		for (i = 0; i < n; i++) {
+			if (screens[i].x_org == scr->x && screens[i].y_org == scr->y) {
+				scr->w = screens[i].width;
+				scr->h = screens[i].height;
+				break;
+			}
+		}
+		XFree(screens);
+	}
+
 	*w = scr->w;
 	*h = scr->h;
 }
